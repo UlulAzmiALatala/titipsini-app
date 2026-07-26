@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Head, Link, usePage } from "@inertiajs/react";
 import GuestLayout from "@/Layouts/GuestLayout";
+import { motion, AnimatePresence } from "framer-motion";
 import {
     ShieldCheck,
     Clock,
@@ -8,7 +9,6 @@ import {
     Users,
     Star,
     ChevronDown,
-    CheckCircle,
     ArrowRight,
     Car,
     Quote,
@@ -17,6 +17,24 @@ import {
     FileText,
     AlertCircle,
 } from "lucide-react";
+
+// --- ANIMATION VARIANTS ---
+const fadeUpVariant = {
+    hidden: { opacity: 0, y: 40 },
+    visible: {
+        opacity: 1,
+        y: 0,
+        transition: { duration: 0.6, ease: "easeOut" },
+    },
+};
+
+const staggerContainer = {
+    hidden: { opacity: 0 },
+    visible: {
+        opacity: 1,
+        transition: { staggerChildren: 0.15 },
+    },
+};
 
 // --- HERO SECTION ---
 const Hero = () => {
@@ -27,7 +45,7 @@ const Hero = () => {
         : "628123456789";
     const message = "Halo, saya ingin bertanya tentang layanan Titipsini.";
     const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(
-        message
+        message,
     )}`;
 
     return (
@@ -37,29 +55,46 @@ const Hero = () => {
 
             <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
                 <div className="grid lg:grid-cols-2 gap-16 items-center">
-                    <div className="text-center lg:text-left">
-                        <div className="inline-flex items-center gap-2 py-1.5 px-4 rounded-full bg-white border border-emerald-200 shadow-sm mb-8 hover:shadow-md transition-all cursor-default">
+                    <motion.div
+                        className="text-center lg:text-left"
+                        initial="hidden"
+                        animate="visible"
+                        variants={staggerContainer}
+                    >
+                        <motion.div
+                            variants={fadeUpVariant}
+                            className="inline-flex items-center gap-2 py-1.5 px-4 rounded-full bg-white border border-emerald-200 shadow-sm mb-8 hover:shadow-md transition-all cursor-default"
+                        >
                             <ShieldCheck className="w-4 h-4 text-emerald-500" />
                             <span className="text-xs font-bold text-emerald-600 tracking-[0.15em] uppercase">
                                 Solusi Terpercaya No. 1
                             </span>
-                        </div>
+                        </motion.div>
 
-                        <h1 className="text-5xl md:text-6xl lg:text-7xl font-extrabold text-gray-900 leading-tight tracking-tight mb-6">
+                        <motion.h1
+                            variants={fadeUpVariant}
+                            className="text-5xl md:text-6xl lg:text-7xl font-extrabold text-gray-900 leading-tight tracking-tight mb-6"
+                        >
                             Titip Barang <br />
                             <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-500 to-teal-400">
                                 Tanpa Rasa Cemas
                             </span>
-                        </h1>
+                        </motion.h1>
 
-                        <p className="text-lg text-gray-500 mb-10 leading-relaxed max-w-2xl mx-auto lg:mx-0 font-medium">
+                        <motion.p
+                            variants={fadeUpVariant}
+                            className="text-lg text-gray-500 mb-10 leading-relaxed max-w-2xl mx-auto lg:mx-0 font-medium"
+                        >
                             Titipsini.com menyediakan layanan penyimpanan barang
                             dan kendaraan dengan keamanan 24/7. Nikmati
                             kebebasan beraktivitas sambil kami menjaga aset
                             berharga Anda.
-                        </p>
+                        </motion.p>
 
-                        <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
+                        <motion.div
+                            variants={fadeUpVariant}
+                            className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start"
+                        >
                             <Link
                                 href={route("penitipan.index")}
                                 className="inline-flex items-center justify-center bg-emerald-500 text-white px-8 py-4 rounded-2xl font-bold text-lg shadow-lg shadow-emerald-500/30 hover:bg-emerald-600 hover:shadow-emerald-600/40 transition-all transform hover:-translate-y-1"
@@ -71,19 +106,28 @@ const Hero = () => {
                                 href={whatsappUrl}
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="inline-flex items-center justify-center bg-white text-gray-700 px-8 py-4 rounded-2xl font-bold text-lg border border-emerald-100 hover:bg-emerald-50 hover:border-emerald-200 transition-all shadow-sm"
+                                className="inline-flex items-center justify-center bg-white text-gray-700 px-8 py-4 rounded-2xl font-bold text-lg border border-emerald-100 hover:bg-emerald-50 hover:border-emerald-200 transition-all shadow-sm transform hover:-translate-y-1"
                             >
                                 Hubungi Kami
                             </a>
-                        </div>
-                    </div>
+                        </motion.div>
+                    </motion.div>
 
-                    <div className="relative hidden lg:block">
+                    <motion.div
+                        className="relative hidden lg:block"
+                        initial={{ opacity: 0, scale: 0.8, rotate: -2 }}
+                        animate={{ opacity: 1, scale: 1, rotate: 0 }}
+                        transition={{
+                            duration: 0.8,
+                            ease: "easeOut",
+                            delay: 0.2,
+                        }}
+                    >
                         <div className="relative rounded-[2.5rem] overflow-hidden shadow-2xl border-4 border-white">
                             <img
                                 src="/images/hero-home.jpg"
                                 alt="Fasilitas Titipsini"
-                                className="w-full h-auto object-cover"
+                                className="w-full h-auto object-cover transition-transform duration-700 hover:scale-105"
                                 onError={(e) => {
                                     e.target.onerror = null;
                                     e.target.src =
@@ -91,7 +135,7 @@ const Hero = () => {
                                 }}
                             />
                         </div>
-                    </div>
+                    </motion.div>
                 </div>
             </div>
         </section>
@@ -138,8 +182,9 @@ const WhyUs = () => {
                 "Kami memberikan jaminan perlindungan terhadap kerusakan atau kehilangan barang.",
         },
     ];
+
     const FeatureCard = ({ icon, title, description }) => (
-        <div className="bg-white p-8 rounded-[2rem] shadow-sm hover:shadow-xl hover:shadow-emerald-100/40 transition-all duration-500 border border-emerald-50 group hover:-translate-y-2">
+        <div className="bg-white p-8 rounded-[2rem] shadow-sm hover:shadow-xl hover:shadow-emerald-100/40 transition-all duration-500 border border-emerald-50 group hover:-translate-y-2 h-full">
             <div className="flex items-center justify-center bg-emerald-50 text-emerald-500 rounded-2xl w-16 h-16 mb-6 group-hover:bg-emerald-500 group-hover:text-white transition-colors duration-500 shadow-sm">
                 {icon}
             </div>
@@ -151,10 +196,17 @@ const WhyUs = () => {
             </p>
         </div>
     );
+
     return (
         <section className="py-24 bg-emerald-50/30">
             <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-                <div className="text-center mb-16 max-w-3xl mx-auto">
+                <motion.div
+                    className="text-center mb-16 max-w-3xl mx-auto"
+                    initial="hidden"
+                    whileInView="visible"
+                    viewport={{ once: true, margin: "-50px" }}
+                    variants={fadeUpVariant}
+                >
                     <span className="text-emerald-500 font-bold tracking-widest uppercase text-xs">
                         Kenapa Kami?
                     </span>
@@ -165,18 +217,26 @@ const WhyUs = () => {
                         Kombinasi teknologi modern dan pelayanan personal yang
                         hangat.
                     </p>
-                </div>
-                <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                </motion.div>
+                <motion.div
+                    className="grid md:grid-cols-2 lg:grid-cols-3 gap-8"
+                    initial="hidden"
+                    whileInView="visible"
+                    viewport={{ once: true, margin: "-50px" }}
+                    variants={staggerContainer}
+                >
                     {features.map((feature, index) => (
-                        <FeatureCard key={index} {...feature} />
+                        <motion.div key={index} variants={fadeUpVariant}>
+                            <FeatureCard {...feature} />
+                        </motion.div>
                     ))}
-                </div>
+                </motion.div>
             </div>
         </section>
     );
 };
 
-//  SYARAT & KETENTUAN SECTION
+// --- SYARAT & KETENTUAN SECTION ---
 const TermsSection = () => {
     const terms = [
         {
@@ -196,8 +256,23 @@ const TermsSection = () => {
     return (
         <section className="py-24 bg-white">
             <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-                <div className="max-w-4xl mx-auto bg-emerald-50 rounded-[2.5rem] p-8 md:p-12 border border-emerald-100 relative overflow-hidden">
-                    <FileText className="absolute -top-6 -right-6 w-48 h-48 text-emerald-100/50 rotate-12" />
+                <motion.div
+                    className="max-w-4xl mx-auto bg-emerald-50 rounded-[2.5rem] p-8 md:p-12 border border-emerald-100 relative overflow-hidden"
+                    initial="hidden"
+                    whileInView="visible"
+                    viewport={{ once: true, margin: "-50px" }}
+                    variants={fadeUpVariant}
+                >
+                    <motion.div
+                        animate={{ rotate: [12, 15, 12] }}
+                        transition={{
+                            repeat: Infinity,
+                            duration: 4,
+                            ease: "easeInOut",
+                        }}
+                    >
+                        <FileText className="absolute -top-6 -right-6 w-48 h-48 text-emerald-100/50" />
+                    </motion.div>
 
                     <div className="relative z-10">
                         <div className="flex items-center gap-3 mb-8">
@@ -209,10 +284,17 @@ const TermsSection = () => {
                             </h2>
                         </div>
 
-                        <div className="space-y-4">
+                        <motion.div
+                            className="space-y-4"
+                            variants={staggerContainer}
+                            initial="hidden"
+                            whileInView="visible"
+                            viewport={{ once: true }}
+                        >
                             {terms.map((term, index) => (
-                                <div
+                                <motion.div
                                     key={index}
+                                    variants={fadeUpVariant}
                                     className="flex gap-4 p-4 bg-white rounded-xl border border-emerald-100/50 shadow-sm hover:shadow-md transition-shadow"
                                 >
                                     <div className="flex-shrink-0 w-6 h-6 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-600 font-bold text-sm mt-0.5">
@@ -221,16 +303,16 @@ const TermsSection = () => {
                                     <p className="text-gray-600 text-sm md:text-base leading-relaxed">
                                         {term.text}
                                     </p>
-                                </div>
+                                </motion.div>
                             ))}
-                        </div>
+                        </motion.div>
 
                         <p className="mt-8 text-xs text-gray-400 italic text-center">
                             *Dengan menggunakan layanan kami, Anda dianggap
                             telah menyetujui syarat dan ketentuan di atas.
                         </p>
                     </div>
-                </div>
+                </motion.div>
             </div>
         </section>
     );
@@ -259,14 +341,16 @@ const Testimonials = () => {
         },
     ];
     const [curr, setCurr] = useState(0);
+
     useEffect(() => {
         const interval = setInterval(() => {
             setCurr((prev) =>
-                prev === testimonials.length - 1 ? 0 : prev + 1
+                prev === testimonials.length - 1 ? 0 : prev + 1,
             );
         }, 6000);
         return () => clearInterval(interval);
     }, [testimonials.length]);
+
     const prev = () => setCurr(curr === 0 ? testimonials.length - 1 : curr - 1);
     const next = () => setCurr(curr === testimonials.length - 1 ? 0 : curr + 1);
 
@@ -274,32 +358,57 @@ const Testimonials = () => {
         <section className="py-24 bg-white relative overflow-hidden">
             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-emerald-50 rounded-full blur-3xl opacity-50 pointer-events-none"></div>
             <div className="container mx-auto px-4 text-center relative z-10">
-                <h2 className="text-3xl md:text-4xl font-bold mb-16 text-gray-900">
+                <motion.h2
+                    className="text-3xl md:text-4xl font-bold mb-16 text-gray-900"
+                    initial="hidden"
+                    whileInView="visible"
+                    viewport={{ once: true }}
+                    variants={fadeUpVariant}
+                >
                     Apa Kata Mereka?
-                </h2>
-                <div className="max-w-4xl mx-auto">
+                </motion.h2>
+
+                <motion.div
+                    className="max-w-4xl mx-auto"
+                    initial="hidden"
+                    whileInView="visible"
+                    viewport={{ once: true }}
+                    variants={fadeUpVariant}
+                >
                     <div className="relative bg-white/80 backdrop-blur-xl rounded-[2.5rem] p-8 md:p-14 shadow-2xl border border-emerald-100">
                         <Quote className="absolute top-8 left-8 w-12 h-12 text-emerald-200 fill-emerald-50" />
-                        <div className="relative z-10">
-                            <p className="text-xl md:text-2xl italic font-medium mb-8 text-gray-700 leading-relaxed">
-                                "{testimonials[curr].quote}"
-                            </p>
-                            <div className="flex items-center justify-center gap-4">
-                                <img
-                                    src={testimonials[curr].image}
-                                    alt={testimonials[curr].name}
-                                    className="w-14 h-14 rounded-full border-2 border-emerald-100 shadow-sm"
-                                />
-                                <div className="text-left">
-                                    <p className="font-bold text-gray-900 text-lg">
-                                        {testimonials[curr].name}
+
+                        <div className="relative z-10 min-h-[160px] flex flex-col justify-center">
+                            <AnimatePresence mode="wait">
+                                <motion.div
+                                    key={curr}
+                                    initial={{ opacity: 0, y: 20 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    exit={{ opacity: 0, y: -20 }}
+                                    transition={{ duration: 0.4 }}
+                                >
+                                    <p className="text-xl md:text-2xl italic font-medium mb-8 text-gray-700 leading-relaxed">
+                                        "{testimonials[curr].quote}"
                                     </p>
-                                    <p className="text-emerald-500 text-sm font-medium">
-                                        {testimonials[curr].title}
-                                    </p>
-                                </div>
-                            </div>
+                                    <div className="flex items-center justify-center gap-4">
+                                        <img
+                                            src={testimonials[curr].image}
+                                            alt={testimonials[curr].name}
+                                            className="w-14 h-14 rounded-full border-2 border-emerald-100 shadow-sm"
+                                        />
+                                        <div className="text-left">
+                                            <p className="font-bold text-gray-900 text-lg">
+                                                {testimonials[curr].name}
+                                            </p>
+                                            <p className="text-emerald-500 text-sm font-medium">
+                                                {testimonials[curr].title}
+                                            </p>
+                                        </div>
+                                    </div>
+                                </motion.div>
+                            </AnimatePresence>
                         </div>
+
                         <button
                             onClick={prev}
                             className="absolute left-4 top-1/2 -translate-y-1/2 p-3 rounded-full bg-white shadow-lg text-gray-400 hover:text-emerald-500 hover:scale-110 transition-all hidden md:block"
@@ -326,7 +435,7 @@ const Testimonials = () => {
                             ))}
                         </div>
                     </div>
-                </div>
+                </motion.div>
             </div>
         </section>
     );
@@ -353,18 +462,32 @@ const FAQ = () => {
     return (
         <section className="py-24 bg-white">
             <div className="container mx-auto px-4 max-w-3xl">
-                <div className="text-center mb-12">
+                <motion.div
+                    className="text-center mb-12"
+                    initial="hidden"
+                    whileInView="visible"
+                    viewport={{ once: true }}
+                    variants={fadeUpVariant}
+                >
                     <span className="text-emerald-500 font-bold tracking-widest uppercase text-xs">
                         FAQ
                     </span>
                     <h2 className="text-3xl font-bold text-gray-900 mt-2">
                         Pertanyaan Umum
                     </h2>
-                </div>
-                <div className="space-y-4">
+                </motion.div>
+
+                <motion.div
+                    className="space-y-4"
+                    initial="hidden"
+                    whileInView="visible"
+                    viewport={{ once: true }}
+                    variants={staggerContainer}
+                >
                     {faqs.map((item, idx) => (
-                        <div
+                        <motion.div
                             key={idx}
+                            variants={fadeUpVariant}
                             className={`bg-white rounded-2xl border transition-all duration-300 ${
                                 openIndex === idx
                                     ? "border-emerald-200 shadow-lg shadow-emerald-100/50"
@@ -401,9 +524,9 @@ const FAQ = () => {
                             >
                                 <p className="text-gray-600">{item.a}</p>
                             </div>
-                        </div>
+                        </motion.div>
                     ))}
-                </div>
+                </motion.div>
             </div>
         </section>
     );
@@ -416,21 +539,26 @@ const Welcome = () => {
             <Head title="Selamat Datang" />
             <div className="font-sans bg-white selection:bg-emerald-100 selection:text-emerald-800">
                 <Hero />
-                {/* Stats section dihapus */}
                 <WhyUs />
                 <TermsSection />
                 <Testimonials />
                 <FAQ />
 
                 {/* Footer CTA */}
-                <div className="container mx-auto px-4 pb-16">
+                <motion.div
+                    className="container mx-auto px-4 pb-16"
+                    initial={{ opacity: 0, scale: 0.95 }}
+                    whileInView={{ opacity: 1, scale: 1 }}
+                    transition={{ duration: 0.6 }}
+                    viewport={{ once: true, margin: "-50px" }}
+                >
                     <div className="bg-gradient-to-r from-emerald-400 to-teal-300 rounded-[2.5rem] p-12 text-center text-white shadow-2xl shadow-emerald-500/20 relative overflow-hidden">
                         <div className="absolute top-0 left-0 w-full h-full bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-10"></div>
                         <div className="relative z-10">
                             <h2 className="text-3xl md:text-4xl font-bold mb-6">
                                 Siap Menitipkan Barang?
                             </h2>
-                            <p className="text-emerald-5 text-lg mb-8 max-w-2xl mx-auto">
+                            <p className="text-emerald-50 text-lg mb-8 max-w-2xl mx-auto">
                                 Jangan biarkan barang bawaan menghambat
                                 aktivitas Anda. Titip sekarang juga!
                             </p>
@@ -442,7 +570,7 @@ const Welcome = () => {
                             </Link>
                         </div>
                     </div>
-                </div>
+                </motion.div>
             </div>
         </GuestLayout>
     );
